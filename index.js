@@ -13,52 +13,60 @@ const decode = async () => {
   // const output = new Buffer(await fs.readFileSync(path.resolve(__dirname, '150.uint64', "binary")));
   // const one = await fs.readFileSync(path.resolve(__dirname, '1.uint64'));
   const onefifty = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
-  // const oneBuf = Buffer.from(one);
-  // const onefiftyBuf= Buffer.from(onefifty);
-  // const buf2 = Buffer.from(output, 'hex');
 
-  // console.log("oneBuf: ", oneBuf)
-  // console.log("onefiftyBuf: ", onefiftyBuf)
-
-  // console.log("oneBuf length: ", oneBuf.length)
-  // console.log("onefiftyBuf length: ", onefiftyBuf.length)
-
-  // console.log("oneBufBE: ", oneBuf.readBigUInt64BE(0))
-  // console.log("onefiftyBufBE: ", onefiftyBuf.readBigUInt64BE(0))
-
-
-  // for (var i = 0; i < onefiftyBuf.length; i++) {
-  //   console.log("buf iteration ", typeof onefiftyBuf[i])
-  //   console.log("buf iteration ", onefiftyBuf[i].toString())
-  //   console.log("buf iteration ", onefiftyBuf[i].toString("hex"))
-  // }
-
-  console.log("onefifty", Buffer.isEncoding(onefifty))
-  console.log("string?", onefifty.toString("hex"))
   const hexString = onefifty.toString("hex");
   let bytes = "";
-  for (var i = 0; i < hexString.length; i++) {
-    console.log(hexString[i])
-    console.log(hex2bin(hexString[i]))
-    bytes += hex2bin(hexString[i]);
+  let decimal = []
+  let hexLength = hexString.length;
+  let trackingPosition = 1;
+
+  const calculateTrackingPosition = (tracker) => {
+    return (8 * tracker) - 1;
   }
-  console.log("das bytes", bytes)
 
-  //for (var i = 0; i < onefifty.length; i++) {
-  //  // console.log("iteration ", typeof onefifty[i])
-  //  // console.log("iteration ", onefifty[i].toString())
-  //     // Extract two characters at a time (one byte)
-  //  const hexValue = onefifty.slice(i, i + 2);
+  let bitProgression = 7;
 
-  //  // console.log("typeof hex", typeof hexValue)
-  //  //
-  //  // Print out the hexadecimal value
-  //  console.log("hex value", hexValue);
+  const calculateDecimal = (number, power) => {
+    const n = Number(number);
+    return n * (16 ** power);
+  }
 
-  //}
+  const calculatePower = (i) => {
+    if (8 > i) {
 
-  // console.log("oneBufLE: ", oneBuf.readBigUInt64LE(0))
-  // console.log("onefiftyBufLE: ", onefiftyBuf.readBigUInt64LE(0))
+      return 7 - i;
+    } else {
+      return bitProgression % i
+    }
+  }
+
+  // two bytes
+  // each byte has 8 bits
+  // first iteration of each byte === highest power
+  let passes = 1;
+  const hexNumeArr = []
+  for (var i = 0; i < hexLength; i++) {
+    if (bitProgression % i === 0 && i !== 1) {
+      bitProgression = calculateTrackingPosition(passes += 1);
+    }
+
+    const power = calculatePower(i)
+
+    const hexNum = hex2number(hexString[i]);
+
+    if (hexLength === (i + 1)) {
+      decimal.push(hexNum)
+    } else {
+      decimal.push(calculateDecimal(hexNum, power))
+    }
+  }
+
+
+    console.log("decimal", decimal)
+    console.log("sum", decimal.reduce((a, b) => a + b, 0))
+
+  // console.log(hex2number('e'));
+
 }
 
 (async () => {
@@ -91,4 +99,60 @@ function hex2bin(hex){
     }
 
     return out;
+}
+
+function hex2num(hex){
+    hex = hex.replace("0x", "").toLowerCase();
+    var out = "";
+    for(var c of hex) {
+        switch(c) {
+            case '0': out += 0; break;
+            case '1': out += 1; break;
+            case '2': out += 2; break;
+            case '3': out += 3; break;
+            case '4': out += 4; break;
+            case '5': out += 5; break;
+            case '6': out += 6; break;
+            case '7': out += 7; break;
+            case '8': out += 8; break;
+            case '9': out += 9; break;
+            case 'a': out += 10; break;
+            case 'b': out += 11; break;
+            case 'c': out += 12; break;
+            case 'd': out += 13; break;
+            case 'e': out += 14; break;
+            case 'f': out += 15; break;
+            default: return "";
+        }
+    }
+
+    return out;
+}
+
+function hex2number(hex){
+    hex = hex.replace("0x", "").toLowerCase();
+    var out = "";
+    for(var c of hex) {
+        switch(c) {
+            case '0': out += 0; break;
+            case '1': out += 1; break;
+            case '2': out += 2; break;
+            case '3': out += 3; break;
+            case '4': out += 4; break;
+            case '5': out += 5; break;
+            case '6': out += 6; break;
+            case '7': out += 7; break;
+            case '8': out += 8; break;
+            case '9': out += 9; break;
+            case 'a': out += 10; break;
+            case 'b': out += 11; break;
+            case 'c': out += 12; break;
+            case 'd': out += 13; break;
+            case 'e': out += 14; break;
+            case 'f': out += 15; break;
+            default: return "";
+        }
+    }
+
+    return Number(out);
 }
