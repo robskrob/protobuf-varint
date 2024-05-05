@@ -36,10 +36,13 @@ const decode = async () => {
   console.log("onefifty", Buffer.isEncoding(onefifty))
   console.log("string?", onefifty.toString("hex"))
   const hexString = onefifty.toString("hex");
+  let bytes = "";
   for (var i = 0; i < hexString.length; i++) {
     console.log(hexString[i])
     console.log(hex2bin(hexString[i]))
+    bytes += hex2bin(hexString[i]);
   }
+  console.log("das bytes", bytes)
 
   //for (var i = 0; i < onefifty.length; i++) {
   //  // console.log("iteration ", typeof onefifty[i])
