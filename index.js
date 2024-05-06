@@ -9,64 +9,38 @@ const encode = async () => {
 }
 
 const decode = async () => {
-  console.log(path.resolve(__dirname, '150.uint64'))
-  // const output = new Buffer(await fs.readFileSync(path.resolve(__dirname, '150.uint64', "binary")));
-  // const one = await fs.readFileSync(path.resolve(__dirname, '1.uint64'));
-  const onefifty = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
-
-  const hexString = onefifty.toString("hex");
-  let bytes = "";
-  let decimal = []
-  let hexLength = hexString.length;
-  let trackingPosition = 1;
-
   const calculateTrackingPosition = (tracker) => {
     return (8 * tracker) - 1;
   }
-
-  let bitProgression = 7;
 
   const calculateDecimal = (number, power) => {
     const n = Number(number);
     return n * (16 ** power);
   }
 
-  const calculatePower = (i) => {
-    if (8 > i) {
-
-      return 7 - i;
-    } else {
-      return bitProgression % i
-    }
+  const calculatePower = (length, i) => {
+    return (length - 1) - i;
   }
 
-  // two bytes
-  // each byte has 8 bits
-  // first iteration of each byte === highest power
+  console.log(path.resolve(__dirname, '150.uint64'))
+  const encoded = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
+
+  const hexString = encoded.toString("hex");
+  let decimal = []
+  let hexLength = hexString.length;
+
+  let bitProgression = 15;
+
   let passes = 1;
   const hexNumeArr = []
+  console.log("bits", hexLength)
+  console.log("hexString", hexString)
   for (var i = 0; i < hexLength; i++) {
-    if (bitProgression % i === 0 && i !== 1) {
-      bitProgression = calculateTrackingPosition(passes += 1);
-    }
-
-    const power = calculatePower(i)
-
-    const hexNum = hex2number(hexString[i]);
-
-    if (hexLength === (i + 1)) {
-      decimal.push(hexNum)
-    } else {
-      decimal.push(calculateDecimal(hexNum, power))
-    }
+    decimal.push(calculateDecimal(hex2number(hexString[i]), calculatePower(hexLength, i)));
   }
 
-
-    console.log("decimal", decimal)
-    console.log("sum", decimal.reduce((a, b) => a + b, 0))
-
-  // console.log(hex2number('e'));
-
+  console.log("decimal", decimal)
+  console.log("sum", decimal.reduce((a, b) => a + b, 0))
 }
 
 (async () => {
