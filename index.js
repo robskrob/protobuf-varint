@@ -15,15 +15,14 @@ const decode = async () => {
 
   const calculateDecimal = (number, power) => {
     const n = Number(number);
-    return n * (16 ** power);
+    return n * 16 ** power;
   }
 
   const calculatePower = (length, i) => {
     return (length - 1) - i;
   }
 
-  console.log(path.resolve(__dirname, '150.uint64'))
-  const encoded = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
+  const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
 
   const hexString = encoded.toString("hex");
   let decimal = []
