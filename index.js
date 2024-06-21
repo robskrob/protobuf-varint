@@ -50,30 +50,21 @@ const decode = async () => {
 
     const powered = BigInt(powerOfSixteen ** p);
     const product = BigInt(n * powered)
-    console.log(`${powerOfSixteen} ** ${power}`, powered)
-    console.log(`${n} * ${powered}`, product)
     return product;
   }
 
-  const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
+  const encoded = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
 
   const hexString = encoded.toString("hex");
   let decimal = []
   let hexLength = hexString.length;
   let highestPower = hexLength - 1;
-
-  // let bitProgression = 15;
-
-  // let passes = 1;
-  console.log("hexString", hexString)
-  console.log("number of bytes", hexLength)
-  console.log("highest power", highestPower)
   for (var i = 0; i < hexLength; i++) {
     decimal.push(calculateDecimal(hex2number(hexString[i]), highestPower - i));
   }
 
-  console.log("decimal", decimal)
   const sum = decimal.reduce((a, b) => BigInt(a) + BigInt(b), 0);
+
   console.log("sum", sum.toString())
 
   return sum;
