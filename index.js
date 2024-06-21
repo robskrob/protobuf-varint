@@ -41,12 +41,18 @@ const encode = (number) => {
 }
 
 const decode = async () => {
-  const powerOfSixteen = 16;
 
   const calculateDecimal = (number, power) => {
-    const n = Number(number);
-    console.log(`${n} * ${powerOfSixteen} ** ${power}`)
-    return n * powerOfSixteen ** power;
+    const powerOfSixteen = BigInt(16);
+    const n = BigInt(number);
+    const p = BigInt(power);
+
+
+    const powered = BigInt(powerOfSixteen ** p);
+    const product = BigInt(n * powered)
+    console.log(`${powerOfSixteen} ** ${power}`, powered)
+    console.log(`${n} * ${powered}`, product)
+    return product;
   }
 
   const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
@@ -67,8 +73,8 @@ const decode = async () => {
   }
 
   console.log("decimal", decimal)
-  const sum = decimal.reduce((a, b) => a + b, 0);
-  console.log("sum", sum)
+  const sum = decimal.reduce((a, b) => BigInt(a) + BigInt(b), 0);
+  console.log("sum", sum.toString())
 
   return sum;
 }
