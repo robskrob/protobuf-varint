@@ -40,7 +40,7 @@ const encode = (number) => {
   }
 }
 
-const decode = async () => {
+const decode = (encoded) => {
 
   const calculateDecimal = (number, power) => {
     const powerOfSixteen = BigInt(16);
@@ -52,8 +52,6 @@ const decode = async () => {
     const product = BigInt(n * powered)
     return product;
   }
-
-  const encoded = await fs.readFileSync(path.resolve(__dirname, '150.uint64'));
 
   const hexString = encoded.toString("hex");
   let decimal = []
@@ -73,9 +71,12 @@ const decode = async () => {
 (async () => {
   // encode(150) == b'\x96\x01'
   // decode(b'\x96\x01') == 150
-  await decode();
-  // const coded = encode(1);
-  // console.log(coded);
+
+  const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
+
+  decode(encoded);
+  const coded = encode(150);
+  console.log(coded);
 })()
 
 function num2hex(num){
