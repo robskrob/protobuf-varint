@@ -32,7 +32,6 @@ const encode = (number) => {
     return binary
   }, "")
 
-  console.log(binString)
   if (binString[0] === '1') {
     return fullHex + "01";
   } else {
@@ -63,19 +62,16 @@ const decode = (encoded) => {
 
   const sum = decimal.reduce((a, b) => BigInt(a) + BigInt(b), 0);
 
-  console.log("sum", sum.toString())
-
   return sum;
 }
 
 (async () => {
-  // encode(150) == b'\x96\x01'
-  // decode(b'\x96\x01') == 150
-
   const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
 
   // works for BigInt
-  decode(encoded);
+  const decoded = decode(encoded);
+  console.log("sum", decoded.toString())
+
   // does not work for BigInt values
   // TODO: how to make this work for BigInt values?
   const coded = encode(150);
