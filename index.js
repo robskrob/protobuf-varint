@@ -74,7 +74,10 @@ const decode = (encoded) => {
 
   const encoded = await fs.readFileSync(path.resolve(__dirname, 'maxint.uint64'));
 
+  // works for BigInt
   decode(encoded);
+  // does not work for BigInt values
+  // TODO: how to make this work for BigInt values?
   const coded = encode(150);
   console.log(coded);
 })()
