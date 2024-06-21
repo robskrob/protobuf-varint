@@ -33,9 +33,9 @@ const encode = (number) => {
   }, "")
 
   if (binString[0] === '1') {
-    return fullHex + "01";
+    return binString + "01";
   } else {
-    return "0" + fullHex
+    return binString
   }
 }
 
@@ -74,7 +74,7 @@ const decode = (encoded) => {
 
   // does not work for BigInt values
   // TODO: how to make this work for BigInt values?
-  const coded = encode(150);
+  const coded = encode(1);
   console.log(coded);
 })()
 
