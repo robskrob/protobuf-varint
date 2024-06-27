@@ -3,11 +3,11 @@ import struct
 def encode(n):
     out = []
     while n >0:
-        print('n', n)
         part = n % 128
-        print('part', part)
-        out.append(part)
         n >>= 7
+        if n > 0:
+            part |= 0x80
+        out.append(part)
     return bytes(out)
 
 with open('150.uint64', 'rb') as f:
