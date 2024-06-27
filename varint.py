@@ -10,6 +10,14 @@ def encode(n):
         out.append(part)
     return bytes(out)
 
-with open('150.uint64', 'rb') as f:
-    n = struct.unpack('>Q', f.read())[0]
-    print(encode(n))
+if __name__ == '__main__':
+    cases = (
+        ('1.uint64', b'\x01'),
+        ('150.uint64', b'\x96\x01'),
+        ('maxint.uint64', b'\xff\xff\xff\xff\xff\xff\xff\xff\xff\x01'),
+    )
+    for fname, expectation in cases:
+        with open(fname, 'rb') as f:
+            n = struct.unpack('>Q', f.read())[0]
+            assert encode(n) == expectation
+    print('ok')
